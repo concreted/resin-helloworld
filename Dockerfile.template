@@ -13,6 +13,26 @@ FROM resin/%%RESIN_MACHINE_NAME%%-node:6-slim
 # Defines our working directory in container
 WORKDIR /usr/src/app
 
+
+# -- Start of resin-wifi-connect section -- #
+
+# Set the device type environment variable using Dockerfile templates
+ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
+
+# Use apt-get to install dependencies
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+    dnsmasq && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install resin-wifi-connect
+RUN curl https://api.github.com/repos/resin-io/resin-wifi-connect/releases/latest -s \
+    | grep -hoP 'browser_download_url": "\K.*%%RESIN_ARCH%%\.tar\.gz' \
+    | xargs -n1 curl -Ls \
+    | tar -xvz -C /usr/src/app/
+
+# -- End of resin-wifi-connect section -- #
+
+
 # Copies the package.json first for better cache on later pushes
 COPY package.json package.json
 
@@ -27,4 +47,4 @@ COPY . ./
 ENV INITSYSTEM on
 
 # server.js will run when container starts up on the device
-CMD ["npm", "start"]
+CMD ["bash", "start.sh"]
