@@ -7,7 +7,7 @@ umount /dev/shm && mount -t tmpfs shm /dev/shm
 
 # Do wifi connect
 export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
-./wifi-connect --clear=false
+./wifi-connect --clear=true
 
 
 # using local electron module instead of the global electron lets you
