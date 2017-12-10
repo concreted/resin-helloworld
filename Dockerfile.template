@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y \
 
 
 # -- Start of resin-wifi-connect section -- #
+RUN mkdir -p /usr/src/app
 
 # Set the device type environment variable using Dockerfile templates
 ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
